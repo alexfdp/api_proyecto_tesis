@@ -3,6 +3,6 @@ import { consultar } from "../controllers/index.controller.js";
 
 const router = Router()
 
-router.get('/prueba', consultar);
+router.get('/', consultar);
 
 export default router;
