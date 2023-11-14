@@ -8,7 +8,7 @@ export const autenticar = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { usuario, contrasena } = req.body;
-        const [result] = await pool.query('SELECT iduser, usuario, contrasena, descripcion as rol FROM USUARIO INNER JOIN rol ON rol_id=idrol WHERE usuario = ?;'
+        const [result] = await pool.query('SELECT iduser, usuario, contrasena, descripcion as rol FROM USUARIO INNER JOIN rol ON rol_id = idrol WHERE usuario = ?;'
             , [usuario]);
         if (result.length == 0) {
             res.status(400).json({
@@ -17,6 +17,8 @@ export const autenticar = async (req, res) => {
         } else {
             var usu = new User();
             usu = result[0];
+            // const cr = await cifr.cifrar(contrasena);
+            // console.log("contrasena cifrada: " + cr);
             const cpr = await cifr.comparar(contrasena, usu.contrasena);
             if (cpr) {
                 const token = jwt.sign({ id: usu.iduser, rol: usu.rol }, config.SECRET, {

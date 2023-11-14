@@ -4,5 +4,4 @@ const router = Router()
 
 router.post('/', authCtrl.autenticar);
 
-
 export default router;

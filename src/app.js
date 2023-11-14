@@ -1,6 +1,8 @@
 import express from 'express';
 import pruebaRoutes from './routes/index.routes.js';
 import auth from './routes/auth.routes.js';
+import user from './routes/user.routes.js';
+import empleado from './routes/empleados.routes.js';
 import cors from 'cors'
 // var cors = require('cors');
 
@@ -11,6 +13,8 @@ app.use(express.json())
 
 app.use('/prueba', pruebaRoutes)
 app.use('/api/auth', auth)
+app.use('/api', user)
+app.use('/api',empleado)
 // app.use('/api', usersRoutes)
 
 app.use((req, res, next) => {
