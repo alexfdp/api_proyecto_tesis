@@ -5,4 +5,6 @@ const router = Router()
 
 router.get('/empleados', verifytoken, employes.consultAllEmployees);
 
+router.post('/empleados', verifytoken, employes.agregarEmpleado);
+
 export default router;

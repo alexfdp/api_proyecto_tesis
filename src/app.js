@@ -14,7 +14,7 @@ app.use(express.json())
 app.use('/prueba', pruebaRoutes)
 app.use('/api/auth', auth)
 app.use('/api', user)
-app.use('/api',empleado)
+app.use('/api', empleado)
 // app.use('/api', usersRoutes)
 
 app.use((req, res, next) => {
