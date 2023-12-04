@@ -7,8 +7,8 @@ export const consultAllEmployees = async (req, res) => {
         const { id } = req.params;
         const [result] = await pool.query('SELECT p.nombre, p.apellido, p.apellido_2, ' +
             'p.estado, pt.descripcion AS puesto, p.fecha_registro FROM usuario ' +
-            'INNER JOIN persona AS p ON persona_id = idpersona ' +
-            'INNER JOIN puesto AS pt ON puesto_id = pt.idpuesto WHERE iduser != ?;'
+            'INNER JOIN empleado AS p ON empleado_id = idempleado ' +
+            'INNER JOIN puesto AS pt ON p.puesto_id = pt.idpuesto WHERE iduser != ?;'
             , [id]);
         if (result.length <= 0) {
             res.status(400).json({

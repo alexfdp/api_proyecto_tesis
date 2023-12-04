@@ -5,7 +5,7 @@ export const consultarDataUser = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { id } = req.params;
-        const [result] = await pool.query('SELECT p.nombre, p.apellido, p.apellido_2, r.descripcion AS rol FROM usuario INNER JOIN persona AS p ON persona_id = idpersona INNER JOIN rol AS r on rol_id = idrol WHERE iduser = ?;'
+        const [result] = await pool.query('SELECT p.nombre, p.apellido, p.apellido_2, r.descripcion AS rol FROM usuario INNER JOIN empleado AS p ON empleado_id = idempleado INNER JOIN rol AS r on rol_id = idrol WHERE iduser = ?;'
             , [id]);
         if (result.length <= 0) {
             res.status(400).json({
