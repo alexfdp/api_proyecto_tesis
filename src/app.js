@@ -1,5 +1,5 @@
 import express from 'express';
-import pruebaRoutes from './routes/index.routes.js';
+import publicRoutes from './routes/public.routes.js';
 import auth from './routes/auth.routes.js';
 import user from './routes/user.routes.js';
 import empleado from './routes/empleados.routes.js';
@@ -11,7 +11,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-app.use('/prueba', pruebaRoutes)
+app.use('/api/public', publicRoutes)
 app.use('/api/auth', auth)
 app.use('/api', user)
 app.use('/api', empleado)
