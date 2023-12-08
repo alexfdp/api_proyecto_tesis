@@ -29,15 +29,25 @@ export const agregarEmpleado = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_contratacion, usuario, contrasena } = req.body;
-        const [result] = await pool.query(`INSERT INTO empleado 
+        let result;
+        if (fecha_contratacion == null) {
+            [result] = await pool.query(`INSERT INTO empleado 
+            (puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo) 
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);`
+                , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo]);
+
+        } else {
+            [result] = await pool.query(`INSERT INTO empleado 
             (puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo) 
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
-            , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo]);
+                , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo]);
+        }
+
         const cr = await cifr.cifrar(contrasena);
         const ide = result.insertId;
         ingresarUser(ide, rol_id, usuario, cr, res);
     } catch (error) {
-        console.log("error: " + error.message);
+        console.log("error insert employee: " + error.message);
         res.status(500).json({
             message: "Ha ocurrido un error al crear empelado: " + error.message
         })
@@ -52,7 +62,7 @@ async function ingresarUser(empleado_id, rol_id, usuario, contrasena, res) {
             res.send("guardado correctamente")
         }
     } catch (error) {
-        console.log("error: " + error.message)
+        console.log("error insert user: " + error.message)
         res.status(500).json({
             message: "Ha ocurrido al crear usuario: " + error.message
         })
