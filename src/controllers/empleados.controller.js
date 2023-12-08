@@ -35,14 +35,12 @@ export const agregarEmpleado = async (req, res) => {
             (puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo) 
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);`
                 , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo]);
-
         } else {
             [result] = await pool.query(`INSERT INTO empleado 
             (puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo) 
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
                 , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo]);
         }
-
         const cr = await cifr.cifrar(contrasena);
         const ide = result.insertId;
         ingresarUser(ide, rol_id, usuario, cr, res);
