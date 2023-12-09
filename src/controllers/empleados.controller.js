@@ -28,18 +28,18 @@ export const consultAllEmployees = async (req, res) => {
 export const agregarEmpleado = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
-        const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_contratacion, usuario, contrasena } = req.body;
+        const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_nacimiento, fecha_contratacion, usuario, contrasena } = req.body;
         let result;
         if (fecha_contratacion == null) {
             [result] = await pool.query(`INSERT INTO empleado 
-            (puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo) 
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);`
-                , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo]);
+            (puesto_id, nombre, apellido, apellido_2, fecha_nacimiento, cedula, direccion, telefono, correo, sueldo) 
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+                , [puesto_id, nombre, apellido, apellido_2, fecha_nacimiento, cedula, direccion, telefono, correo, sueldo]);
         } else {
             [result] = await pool.query(`INSERT INTO empleado 
-            (puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo) 
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
-                , [puesto_id, nombre, apellido, apellido_2, cedula, direccion, telefono, correo, fecha_contratacion, sueldo]);
+            (puesto_id, nombre, apellido, apellido_2, fecha_nacimiento, cedula, direccion, telefono, correo, fecha_contratacion, sueldo) 
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+                , [puesto_id, nombre, apellido, apellido_2, fecha_nacimiento, cedula, direccion, telefono, correo, fecha_contratacion, sueldo]);
         }
         const cr = await cifr.cifrar(contrasena);
         const ide = result.insertId;
@@ -57,7 +57,10 @@ async function ingresarUser(empleado_id, rol_id, usuario, contrasena, res) {
         const [result] = await pool.query('INSERT INTO usuario (rol_id, empleado_id, usuario, contrasena) VALUES(?, ?, ?, ?);'
             , [rol_id, empleado_id, usuario, contrasena]);
         if (result.insertId != 0) {
-            res.send("guardado correctamente")
+            // res.send("Guardado correctamente.")
+            res.status(200).json({
+                message: "Guardado exitosamente."
+            })
         }
     } catch (error) {
         console.log("error insert user: " + error.message)
