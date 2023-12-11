@@ -5,7 +5,7 @@ export const consultAllEmployees = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { id } = req.params;
-        const [result] = await pool.query('SELECT p.nombre, p.apellido, p.apellido_2, ' +
+        const [result] = await pool.query('SELECT p.idempleado, p.nombre, p.apellido, p.apellido_2, ' +
             'p.estado, pt.descripcion AS puesto, p.fecha_registro FROM usuario ' +
             'INNER JOIN empleado AS p ON empleado_id = idempleado ' +
             'INNER JOIN puesto AS pt ON p.puesto_id = pt.idpuesto WHERE iduser != ?;'
