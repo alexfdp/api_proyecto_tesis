@@ -7,4 +7,10 @@ router.get('/empleados', verifytoken, employes.consultAllEmployees);
 
 router.post('/empleados', verifytoken, employes.agregarEmpleado);
 
+router.post('/empleados/validuser', verifytoken, employes.leerUser);
+
+router.put('/empleados', verifytoken, employes.actualizarEmpleado);
+
+router.put('/empleados/estado', verifytoken, employes.updateEstado);
+
 export default router;

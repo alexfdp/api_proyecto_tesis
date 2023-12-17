@@ -6,21 +6,107 @@ export const consultAllEmployees = async (req, res) => {
     try {
         const { id } = req.params;
         const [result] = await pool.query('SELECT p.idempleado, p.nombre, p.apellido, p.apellido_2, ' +
-            'p.estado, pt.descripcion AS puesto, p.fecha_registro FROM usuario ' +
+            'p.estado, p.cedula, p.direccion, p.telefono, p.correo, p.sueldo, p.fecha_nacimiento, ' +
+            'pt.descripcion AS puesto, p.fecha_contratacion, p.fecha_registro, usr.rol_id, usr.usuario ' +
+            'FROM usuario AS usr ' +
             'INNER JOIN empleado AS p ON empleado_id = idempleado ' +
-            'INNER JOIN puesto AS pt ON p.puesto_id = pt.idpuesto WHERE iduser != ?;'
+            'INNER JOIN puesto AS pt ON p.puesto_id = pt.idpuesto WHERE iduser != ? ORDER BY p.idempleado DESC;'
             , [id]);
         if (result.length <= 0) {
             res.status(400).json({
                 message: "No hubo resultados para la consulta"
             })
         } else {
-            res.json(result);
+            res.status(200).json(result);
         }
     } catch (error) {
         console.log("error: " + error.message)
         res.status(500).json({
             message: "Ha ocurrido un error al consultar empleados: " + error.message
+        })
+    }
+}
+
+export const leerUser = async (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    try {
+        const { usuario } = req.body;
+        const [result] = await pool.query(`SELECT usuario FROM usuario WHERE usuario = ?;`
+            , [usuario]);
+        if (result.length <= 0) {
+            res.status(200).json({
+                message: 'Usuario no existe'
+            })
+        } else {
+            res.status(404).json({
+                message: 'Usuario existe'
+            })
+        }
+    } catch (error) {
+        console.log("error insert employee: " + error.message);
+        res.status(500).json({
+            message: "Ha ocurrido un error al crear empelado: " + error.message
+        })
+    }
+}
+
+export const actualizarEmpleado = async (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    try {
+        const { direccion, telefono, correo, puesto_id, sueldo, rol_id, idempleado } = req.body;
+        const [result] = await pool.query(`UPDATE empleado AS e INNER JOIN usuario AS u SET 
+            e.direccion = ?, e.telefono = ?, e.correo = ?, e.puesto_id = ?, e.sueldo = ?, 
+            u.rol_id = ? WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
+            , [direccion, telefono, correo, puesto_id, sueldo, rol_id, idempleado]);
+        if (result.affectedRows <= 0) {
+            console.log('No se pudo actualizar')
+            res.status(400).json({
+                message: 'No se pudo actualizar'
+            })
+        } else {
+            console.log('Actualizado con éxito')
+            res.status(200).json({
+                message: 'Actualizado con éxito'
+            })
+        }
+    } catch (error) {
+        console.log("error update employee: " + error.message);
+        res.status(500).json({
+            message: "Ha ocurrido un error al actualizar empelado: " + error.message
+        })
+    }
+}
+
+export const updateEstado = async (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    try {
+        let result;
+        const { estado, idempleado } = req.body;
+        if (estado === 1) {
+            [result] = await pool.query(`UPDATE empleado AS e INNER JOIN usuario AS u 
+                SET e.estado = 0, u.estado = 0 WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
+                , [idempleado]);
+        } else {
+            [result] = await pool.query(`UPDATE empleado AS e INNER JOIN usuario AS u 
+                SET e.estado = 1, u.estado = 2 WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
+                , [idempleado]);
+        }
+
+        if (result.affectedRows <= 0) {
+            console.log('No se pudo actualizar el estado')
+            res.status(400).json({
+                message: 'No se pudo actualizar'
+            })
+        } else {
+            console.log('Actualizado con éxito')
+            res.status(200).json({
+                message: 'Estado actualizado con éxito'
+            })
+        }
+    } catch (error) {
+        console.log("error update employee: " + error.message);
+        res.status(500).json({
+            message: "Ha ocurrido un error al actualizar estado empelado: " + error.message
         })
     }
 }
