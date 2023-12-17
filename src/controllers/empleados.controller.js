@@ -91,7 +91,6 @@ export const updateEstado = async (req, res) => {
                 SET e.estado = 1, u.estado = 2 WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
                 , [idempleado]);
         }
-
         if (result.affectedRows <= 0) {
             console.log('No se pudo actualizar el estado')
             res.status(400).json({
