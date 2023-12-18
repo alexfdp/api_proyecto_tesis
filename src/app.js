@@ -2,6 +2,7 @@ import express from 'express';
 import publicRoutes from './routes/public.routes.js';
 import auth from './routes/auth.routes.js';
 import user from './routes/user.routes.js';
+import usuarios from './routes/usuarios.routes.js'
 import empleado from './routes/empleados.routes.js';
 import cors from 'cors'
 // var cors = require('cors');
@@ -15,7 +16,7 @@ app.use('/api/public', publicRoutes)
 app.use('/api/auth', auth)
 app.use('/api', user)
 app.use('/api', empleado)
-// app.use('/api', usersRoutes)
+app.use('/api', usuarios)
 
 app.use((req, res, next) => {
     res.status(404).json({
