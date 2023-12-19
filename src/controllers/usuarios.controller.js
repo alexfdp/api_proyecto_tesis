@@ -1,4 +1,5 @@
 import { pool } from '../db.js';
+import * as cifr from '../models/cifrar.js';
 
 export const consultarAllUsers = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -28,11 +29,13 @@ export const consultarAllUsers = async (req, res) => {
 export const updateUsuario = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
-        const { iduser, usuario, contrasena } = req.body;
+        const { iduser, usuario, contrasena, rol_id } = req.body;
+        const cr = await cifr.cifrar(contrasena);
         const [result] = await pool.query(`UPDATE usuario AS u 
-            SET u.usuario = ?, u.contrasena = ? 
+            SET u.usuario = ?, u.contrasena = ?, u.rol_id = ?, u.estado = 2 
             WHERE u.iduser = ? AND u.estado != 0;`,
-            [usuario, contrasena, iduser]);
+            [usuario, cr, rol_id, iduser]);
+
         if (result.affectedRows <= 0) {
             console.log('No se pudo actualizar usuario')
             res.status(400).json({

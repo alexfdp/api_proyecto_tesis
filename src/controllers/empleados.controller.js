@@ -7,7 +7,7 @@ export const consultAllEmployees = async (req, res) => {
         const { id } = req.params;
         const [result] = await pool.query('SELECT p.idempleado, p.nombre, p.apellido, p.apellido_2, ' +
             'p.estado, p.cedula, p.direccion, p.telefono, p.correo, p.sueldo, p.fecha_nacimiento, ' +
-            'pt.descripcion AS puesto, p.fecha_contratacion, p.fecha_registro, usr.rol_id, usr.usuario ' +
+            'pt.descripcion AS puesto, p.fecha_contratacion, p.fecha_registro, usr.usuario ' +
             'FROM usuario AS usr ' +
             'INNER JOIN empleado AS p ON empleado_id = idempleado ' +
             'INNER JOIN puesto AS pt ON p.puesto_id = pt.idpuesto WHERE iduser != ? ORDER BY p.idempleado DESC;'
@@ -53,11 +53,11 @@ export const leerUser = async (req, res) => {
 export const actualizarEmpleado = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
-        const { direccion, telefono, correo, puesto_id, sueldo, rol_id, idempleado } = req.body;
+        const { direccion, telefono, correo, puesto_id, sueldo, idempleado } = req.body;
         const [result] = await pool.query(`UPDATE empleado AS e INNER JOIN usuario AS u SET 
-            e.direccion = ?, e.telefono = ?, e.correo = ?, e.puesto_id = ?, e.sueldo = ?, 
-            u.rol_id = ? WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
-            , [direccion, telefono, correo, puesto_id, sueldo, rol_id, idempleado]);
+            e.direccion = ?, e.telefono = ?, e.correo = ?, e.puesto_id = ?, e.sueldo = ? 
+            WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
+            , [direccion, telefono, correo, puesto_id, sueldo, idempleado]);
         if (result.affectedRows <= 0) {
             console.log('No se pudo actualizar')
             res.status(400).json({
@@ -113,7 +113,7 @@ export const updateEstado = async (req, res) => {
 export const agregarEmpleado = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
-        const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_nacimiento, fecha_contratacion, usuario, contrasena } = req.body;
+        const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_nacimiento, fecha_contratacion, usuario} = req.body;
         let result;
         if (fecha_contratacion == null) {
             [result] = await pool.query(`INSERT INTO empleado 
@@ -126,9 +126,8 @@ export const agregarEmpleado = async (req, res) => {
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
                 , [puesto_id, nombre, apellido, apellido_2, fecha_nacimiento, cedula, direccion, telefono, correo, fecha_contratacion, sueldo]);
         }
-        const cr = await cifr.cifrar(contrasena);
         const ide = result.insertId;
-        ingresarUser(ide, rol_id, usuario, cr, res);
+        ingresarUser(ide, rol_id, usuario, res);
     } catch (error) {
         console.log("error insert employee: " + error.message);
         res.status(500).json({
@@ -137,10 +136,10 @@ export const agregarEmpleado = async (req, res) => {
     }
 }
 
-async function ingresarUser(empleado_id, rol_id, usuario, contrasena, res) {
+async function ingresarUser(empleado_id, rol_id, usuario, res) {
     try {
-        const [result] = await pool.query('INSERT INTO usuario (rol_id, empleado_id, usuario, contrasena) VALUES(?, ?, ?, ?);'
-            , [rol_id, empleado_id, usuario, contrasena]);
+        const [result] = await pool.query('INSERT INTO usuario (rol_id, empleado_id, usuario) VALUES(?, ?, ?);'
+            , [rol_id, empleado_id, usuario]);
         if (result.insertId != 0) {
             // res.send("Guardado correctamente.")
             res.status(200).json({
