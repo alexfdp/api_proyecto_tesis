@@ -8,9 +8,9 @@ export const autenticar = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { usuario, contrasena } = req.body;
-        const [result] = await pool.query('SELECT iduser, usuario, contrasena, descripcion as rol FROM USUARIO INNER JOIN rol ON rol_id = idrol WHERE usuario = ?;'
+        const [result] = await pool.query('SELECT iduser, usuario, contrasena, estado, descripcion as rol FROM USUARIO INNER JOIN rol ON rol_id = idrol WHERE usuario = ? AND estado != 0;'
             , [usuario]);
-        if (result.length == 0) {
+        if (result.length <= 0) {
             res.status(400).json({
                 message: "Usuario no existe"
             })
@@ -25,6 +25,7 @@ export const autenticar = async (req, res) => {
                     expiresIn: 86400 //24 horas
                 })
                 res.json({
+                    estado: usu.estado,
                     token
                 });
             } else {
