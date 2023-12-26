@@ -5,6 +5,8 @@ const router = Router()
 
 router.get('/empleados', verifytoken, employes.consultAllEmployees);
 
+router.get('/empleados/only', verifytoken, employes.consultOnlyEmployees);
+
 router.post('/empleados', verifytoken, employes.agregarEmpleado);
 
 router.post('/empleados/validuser', verifytoken, employes.leerUser);
