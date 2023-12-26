@@ -8,7 +8,10 @@ export const autenticar = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { usuario, contrasena } = req.body;
-        const [result] = await pool.query('SELECT iduser, usuario, contrasena, estado, descripcion as rol FROM USUARIO INNER JOIN rol ON rol_id = idrol WHERE usuario = ? AND estado != 0;'
+        const [result] = await pool.query(`SELECT iduser, usuario, contrasena, estado, descripcion as rol 
+            FROM USUARIO 
+            INNER JOIN rol ON rol_id = idrol 
+            WHERE usuario = ? AND estado != 0;`
             , [usuario]);
         if (result.length <= 0) {
             res.status(400).json({
@@ -17,8 +20,6 @@ export const autenticar = async (req, res) => {
         } else {
             var usu = new User();
             usu = result[0];
-            // const cr = await cifr.cifrar(contrasena);
-            // console.log("contrasena cifrada: " + cr);
             const cpr = await cifr.comparar(contrasena, usu.contrasena);
             if (cpr) {
                 const token = jwt.sign({ id: usu.iduser, rol: usu.rol }, config.SECRET, {
@@ -26,7 +27,7 @@ export const autenticar = async (req, res) => {
                 })
                 res.json({
                     estado: usu.estado,
-                    token
+                    token: token
                 });
             } else {
                 res.status(400).json({
@@ -48,7 +49,6 @@ export const changePass = async (req, res) => {
         const { id } = req.params;
         const { contrasena } = req.body;
         const cr = await cifr.cifrar(contrasena);
-        console.log("contrasena env: " + contrasena + "\nid: " + id + "\ncontrasena cifrada: " + cr)
         const [result] = await pool.query('UPDATE usuario SET contrasena = ?, estado = 1 WHERE iduser = ? AND ESTADO = 2'
             , [cr, id]);
         if (result.affectedRows <= 0) {

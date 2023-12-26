@@ -5,11 +5,15 @@ export const consultarDataUser = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { id } = req.params;
-        const [result] = await pool.query('SELECT p.nombre, p.apellido, p.apellido_2, r.descripcion AS rol FROM usuario INNER JOIN empleado AS p ON empleado_id = idempleado INNER JOIN rol AS r on rol_id = idrol WHERE iduser = ?;'
+        const [result] = await pool.query(`SELECT p.nombre, p.apellido, p.apellido_2, r.descripcion AS rol 
+            FROM usuario AS u 
+            INNER JOIN empleado AS p ON u.empleado_id = p.idempleado 
+            INNER JOIN rol AS r on u.rol_id = r.idrol 
+            WHERE iduser = ? AND u.estado != 0  AND u.estado != 2;`
             , [id]);
         if (result.length <= 0) {
             res.status(400).json({
-                message: "El usuario que se desea consultar, no existe"
+                message: "El usuario que se desea consultar, no existe o no se encuentra activo"
             })
         } else {
             var usu = new Userperson();

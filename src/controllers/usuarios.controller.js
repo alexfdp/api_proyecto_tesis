@@ -6,11 +6,12 @@ export const consultarAllUsers = async (req, res) => {
     try {
         const { id } = req.params;
         const [result] = await pool.query(`SELECT u.iduser, u.rol_id, e.idempleado, 
-            CONCAT_WS(' ', e.nombre, e.apellido, e.apellido_2) nombre, 
-            u.usuario, u.estado, u.fecha_registro 
-            FROM usuario AS u 
-            INNER JOIN empleado AS e 
-            WHERE  u.iduser != ? AND u.iduser != 1 AND e.idempleado = u.empleado_id ORDER BY u.iduser DESC;`, [id]);
+        CONCAT_WS(' ', e.nombre, e.apellido, e.apellido_2) nombre, 
+        u.usuario, u.estado, u.fecha_registro, r.descripcion AS rol 
+        FROM usuario AS u 
+        INNER JOIN empleado AS e 
+        INNER JOIN rol AS r 
+        WHERE  u.iduser != ? AND u.iduser != 1 AND e.idempleado = u.empleado_id AND r.idrol = u.rol_id ORDER BY u.iduser DESC;`, [id]);
         if (result) {
             res.status(200).json(result)
         } else {
