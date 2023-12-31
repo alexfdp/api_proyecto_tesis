@@ -9,7 +9,7 @@ export const autenticar = async (req, res) => {
     try {
         const { usuario, contrasena } = req.body;
         const [result] = await pool.query(`SELECT iduser, usuario, contrasena, estado, descripcion as rol 
-            FROM USUARIO 
+            FROM usuario 
             INNER JOIN rol ON rol_id = idrol 
             WHERE usuario = ? AND estado != 0;`
             , [usuario]);
