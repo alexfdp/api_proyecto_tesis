@@ -113,7 +113,7 @@ export const updateEstado = async (req, res) => {
 export const agregarEmpleado = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
-        const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_nacimiento, fecha_contratacion, usuario} = req.body;
+        const { nombre, apellido, apellido_2, cedula, direccion, telefono, correo, sueldo, rol_id, puesto_id, fecha_nacimiento, fecha_contratacion, usuario } = req.body;
         let result;
         if (fecha_contratacion == null) {
             [result] = await pool.query(`INSERT INTO empleado 
@@ -150,6 +150,34 @@ async function ingresarUser(empleado_id, rol_id, usuario, res) {
         console.log("error insert user: " + error.message)
         res.status(500).json({
             message: "Ha ocurrido al crear usuario: " + error.message
+        })
+    }
+}
+
+export const consultOnlyEmployees = async (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    try {
+        const { id } = req.params;
+        const [result] = await pool.query(`SELECT e.idempleado, 
+            CONCAT_WS(' ', e.nombre, e.apellido, e.apellido_2) nombre 
+            FROM empleado AS e 
+            INNER JOIN usuario AS u 
+            WHERE u.empleado_id = e.idempleado AND 
+            u.iduser != ? 
+            AND u.iduser != 1 
+            ORDER BY nombre ASC;`
+            , [id]);
+        if (result.length <= 0) {
+            res.status(400).json({
+                message: "No hubo resultados para la consulta"
+            })
+        } else {
+            res.status(200).json(result);
+        }
+    } catch (error) {
+        console.log("error: " + error.message)
+        res.status(500).json({
+            message: "Ha ocurrido un error al consultar empleados: " + error.message
         })
     }
 }
