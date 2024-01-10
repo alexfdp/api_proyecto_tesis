@@ -18,6 +18,11 @@ app.use('/api', user)
 app.use('/api', empleado)
 app.use('/api', usuarios)
 
+app.use('/api/pri',(req, res, next) => {
+    res.status(200).json({
+        message: 'Mensake de ok de api'
+    })
+});
 app.use((req, res, next) => {
     res.status(404).json({
         message: 'Endpoint not found'

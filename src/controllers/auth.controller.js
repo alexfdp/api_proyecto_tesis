@@ -8,6 +8,7 @@ export const autenticar = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { usuario, contrasena } = req.body;
+        console.log("usuario: " + usuario + "\ncontraseña: " + contrasena)
         const [result] = await pool.query(`SELECT iduser, usuario, contrasena, estado, descripcion as rol 
             FROM usuario 
             INNER JOIN rol ON rol_id = idrol 
