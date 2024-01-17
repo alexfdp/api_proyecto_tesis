@@ -4,6 +4,7 @@ import auth from './routes/auth.routes.js';
 import user from './routes/user.routes.js';
 import usuarios from './routes/usuarios.routes.js'
 import empleado from './routes/empleados.routes.js';
+import email from './routes/email.routes.js';
 import cors from 'cors'
 // var cors = require('cors');
 
@@ -17,8 +18,9 @@ app.use('/api/auth', auth)
 app.use('/api', user)
 app.use('/api', empleado)
 app.use('/api', usuarios)
+app.use('/api', email)
 
-app.use('/api/pri',(req, res, next) => {
+app.use('/api/pri', (req, res, next) => {
     res.status(200).json({
         message: 'Mensake de ok de api'
     })

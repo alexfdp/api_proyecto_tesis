@@ -11,7 +11,8 @@ export const consultarAllUsers = async (req, res) => {
         FROM usuario AS u 
         INNER JOIN empleado AS e 
         INNER JOIN rol AS r 
-        WHERE  u.iduser != ? AND u.iduser != 1 AND e.idempleado = u.empleado_id AND r.idrol = u.rol_id ORDER BY u.iduser DESC;`, [id]);
+        WHERE  u.iduser != ? AND u.iduser != 1 AND e.idempleado = u.empleado_id 
+        AND r.idrol = u.rol_id ORDER BY u.iduser DESC;`, [id]);
         if (result) {
             res.status(200).json(result)
         } else {

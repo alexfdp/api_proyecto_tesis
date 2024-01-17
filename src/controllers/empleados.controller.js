@@ -1,5 +1,4 @@
 import { pool } from '../db.js';
-import * as cifr from '../models/cifrar.js';
 
 export const consultAllEmployees = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
