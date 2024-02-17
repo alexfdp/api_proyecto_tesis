@@ -10,7 +10,7 @@ export const searchEmail = async (req, res) => {
         const [result] = await pool.query(`SELECT e.idempleado, e.correo, u.usuario 
         FROM empleado AS e 
         INNER JOIN usuario AS u ON u.empleado_id = e.idempleado 
-        WHERE e.correo = ? limit 1;`
+        WHERE e.correo = ? AND u.estado != 0 limit 1;`
             , [correo]);
         if (result.length <= 0) {
             let msg = "Correo que ingresó no se encuentra registrado"
