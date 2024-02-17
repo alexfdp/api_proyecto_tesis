@@ -9,7 +9,7 @@ export const consultarDataUser = async (req, res) => {
             FROM usuario AS u 
             INNER JOIN empleado AS p ON u.empleado_id = p.idempleado 
             INNER JOIN rol AS r on u.rol_id = r.idrol 
-            WHERE iduser = ? AND u.estado != 0  AND u.estado != 2;`
+            WHERE iduser = ? AND u.estado != 0;`
             , [id]);
         if (result.length <= 0) {
             res.status(400).json({
