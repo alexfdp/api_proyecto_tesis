@@ -23,7 +23,7 @@ export const autenticar = async (req, res) => {
             const cpr = await cifr.comparar(contrasena, usu.contrasena);
             if (cpr) {
                 const token = jwt.sign({ id: usu.iduser, rol: usu.rol }, config.SECRET, {
-                    expiresIn: 60//86400 //24 horas
+                    expiresIn: 86400 //24 horas
                 })
                 res.json({
                     estado: usu.estado,
