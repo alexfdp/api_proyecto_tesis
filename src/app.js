@@ -5,6 +5,7 @@ import user from './routes/user.routes.js';
 import usuarios from './routes/usuarios.routes.js'
 import empleado from './routes/empleados.routes.js';
 import email from './routes/email.routes.js';
+import prueba from './routes/prueba.routes.js';
 import cors from 'cors'
 // var cors = require('cors');
 
@@ -15,6 +16,7 @@ app.use(express.json())
 
 app.use('/api/public', publicRoutes)
 app.use('/api/auth', auth)
+app.use('/api/prueba', prueba)
 app.use('/api', user)
 app.use('/api', empleado)
 app.use('/api', usuarios)
