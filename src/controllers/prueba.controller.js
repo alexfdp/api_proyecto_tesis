@@ -5,7 +5,8 @@ export const validarOPR = async (req, res) => {
     //res.header('Access-Control-Allow-Origin', '*');
     try {
         const { codigoSap } = req.body;
-        console.log("codigoSap: " + codigoSap + "\n")
+        console.log("body: " + req.body);
+        console.log("codigoSap: " + codigoSap);
         var resultado = '{"Codigo": "1","Mensaje Error": "Empleado No Existe"}';
         // if (codigoSap == 10243) {
         //     resultado = '{"Codigo": "1","Mensaje Error": "Empleado No Existe"}';
