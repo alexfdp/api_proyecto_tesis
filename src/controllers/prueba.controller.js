@@ -2,11 +2,11 @@ import jwt from 'jsonwebtoken';
 import config from '../config.js';
 
 export const validarOPR = async (req, res) => {
-    //res.header('Access-Control-Allow-Origin', '*');
     try {
         const { codigoSap } = req.body;
-        console.log(req.body);
-        console.log("codigoSap: " + codigoSap);
+        //console.log(req.body);
+        // console.log(res);
+        //console.log("codigoSap: " + codigoSap);
         var resultado = '{"Codigo": "1","Mensaje Error": "Empleado No Existe"}';
         // if (codigoSap == 10243) {
         //     resultado = '{"Codigo": "1","Mensaje Error": "Empleado No Existe"}';
@@ -15,7 +15,10 @@ export const validarOPR = async (req, res) => {
             resultado = '{"Codigo": "1","Mensaje Error": "Empleado Cesado"}';
         }
         if (codigoSap == "105692") {
-            resultado = '{"Codigo": "0 Proceso Exitoso","CodCargo": "450","Cargo": "SUPERVISOR DE SEGURIDAD","CodTienda": "W001","Tienda": "Guayaquil_AdePaSA-C.C.CeibosADPS"}';
+            resultado = '{"Codigo": "0 Proceso Exitoso","CodCargo": "60","Cargo": "SUPERVISOR DE SEGURIDAD","CodTienda": "W001","Tienda": "Guayaquil_AdePaSA-C.C.CeibosADPS"}';
+        }
+        if (codigoSap == "10563") {
+            resultado = '{"Codigo": "0 Proceso Exitoso","CodCargo": "451","Cargo": "SUPERVISOR","CodTienda": "W001","Tienda": "Guayaquil_AdePaSA-C.C.CeibosADPS"}';
         }
         //console.log(resultado);
         res.json(JSON.parse(resultado));
