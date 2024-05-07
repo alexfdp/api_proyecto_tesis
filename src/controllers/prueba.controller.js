@@ -15,7 +15,7 @@ export const validarOPR = async (req, res) => {
             resultado = '{"Codigo": "1","Mensaje Error": "Empleado Cesado"}';
         }
         if (codigoSap == "105692") {
-            resultado = '{"Codigo": "0 Proceso Exitoso","CodCargo": "60","Cargo": "SUPERVISOR DE SEGURIDAD","CodTienda": "W001","Tienda": "Guayaquil_AdePaSA-C.C.CeibosADPS"}';
+            resultado = '{"Codigo": "0 Proceso Exitoso","CodCargo": "62","Cargo": "SUPERVISOR DE SEGURIDAD","CodTienda": "W001","Tienda": "Guayaquil_AdePaSA-C.C.CeibosADPS"}';
         }
         if (codigoSap == "10563") {
             resultado = '{"Codigo": "0 Proceso Exitoso","CodCargo": "451","Cargo": "SUPERVISOR","CodTienda": "W001","Tienda": "Guayaquil_AdePaSA-C.C.CeibosADPS"}';
