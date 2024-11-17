@@ -9,7 +9,7 @@ export const DB_PASSWORD = process.env.DB_PASSWORD || 'GWXsi@Y;Br6'
 export const DB_PORT = process.env.DB_PORT || '3306'
 export const DB_DATABASE = process.env.DB_DATABASE || 'u708242902_ctrl_employees'
 
-console.log(DB_HOST + ":" + PORT)
+//console.log("DB: " + DB_HOST + ":" + DB_PORT)
 
 export default {
     SECRET: 'api-empleados'

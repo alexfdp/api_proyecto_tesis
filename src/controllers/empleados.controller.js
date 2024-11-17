@@ -1,11 +1,12 @@
 import { pool } from '../db.js';
+import * as cifr from '../models/cifrar.js';
 
 export const consultAllEmployees = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         const { id } = req.params;
         const [result] = await pool.query('SELECT p.idempleado, p.nombre, p.apellido, p.apellido_2, ' +
-            'p.estado, p.cedula, p.direccion, p.telefono, p.correo, p.sueldo, p.fecha_nacimiento, ' +
+            'p.estado, usr.estado AS estadou, p.cedula, p.direccion, p.telefono, p.correo, p.sueldo, p.fecha_nacimiento, ' +
             'pt.descripcion AS puesto, p.fecha_contratacion, p.fecha_registro, usr.usuario ' +
             'FROM usuario AS usr ' +
             'INNER JOIN empleado AS p ON empleado_id = idempleado ' +
@@ -80,15 +81,16 @@ export const updateEstado = async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     try {
         let result;
-        const { estado, idempleado } = req.body;
+        const { estado, idempleado, contrasena } = req.body;
+        const cr = await cifr.cifrar(contrasena);
         if (estado === 1) {
             [result] = await pool.query(`UPDATE empleado AS e INNER JOIN usuario AS u 
-                SET e.estado = 0, u.estado = 0 WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
+                SET e.estado = 0, u.estado = 0, u.contrasena = NULL WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
                 , [idempleado]);
         } else {
             [result] = await pool.query(`UPDATE empleado AS e INNER JOIN usuario AS u 
-                SET e.estado = 1, u.estado = 2 WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
-                , [idempleado]);
+                SET e.estado = 1, u.estado = 2, u.contrasena = ? WHERE e.idempleado = ? AND e.idempleado = u.empleado_id;`
+                , [cr, idempleado]);
         }
         if (result.affectedRows <= 0) {
             console.log('No se pudo actualizar el estado')

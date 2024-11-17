@@ -52,18 +52,18 @@ export const changePass = async (req, res) => {
         const [result] = await pool.query('UPDATE usuario SET contrasena = ?, estado = 1 WHERE iduser = ? AND ESTADO = 2'
             , [cr, id]);
         if (result.affectedRows <= 0) {
-            console.log('No se pudo actualizar contraseña')
+            //console.log('No se pudo actualizar contraseña')
             res.status(400).json({
                 message: 'No se pudo actualizar contraseña'
             })
         } else {
-            console.log('Contraseña actualizada con éxito')
+            //console.log('Contraseña actualizada con éxito')
             res.status(200).json({
                 message: 'Contraseña actualizada con éxito'
             })
         }
     } catch (error) {
-        console.log("Error update password: " + error.message);
+        //console.log("Error update password: " + error.message);
         res.status(500).json({
             message: "Ha ocurrido un error al actualizar contraseña: " + error.message
         })
