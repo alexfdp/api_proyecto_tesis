@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { consultarPuestos, consultarRoles } from "../controllers/public.controller.js";
+import { consultarCargos, consultarRoles } from "../controllers/public.controller.js";
 
 const router = Router()
 
-router.get('/puestos', consultarPuestos);
+router.get('/cargos', consultarCargos);
 
 router.get('/roles', consultarRoles);
 

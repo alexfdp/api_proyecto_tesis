@@ -7,6 +7,7 @@ import empleado from './routes/empleados.routes.js';
 import email from './routes/email.routes.js';
 import prueba from './routes/prueba.routes.js';
 import trabajo from './routes/trabajo.routes.js';
+import rolpago from './routes/rol-pago.routes.js';
 import cors from 'cors'
 // var cors = require('cors');
 
@@ -23,6 +24,7 @@ app.use('/api', empleado)
 app.use('/api', usuarios)
 app.use('/api', email)
 app.use('/api', trabajo)
+app.use('/api', rolpago)
 
 app.use('/api/pri', (req, res, next) => {
     res.status(200).json({
